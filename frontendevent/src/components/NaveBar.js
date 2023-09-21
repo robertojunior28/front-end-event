@@ -18,7 +18,13 @@ function Navbar(props){
             <ul className="navbar-nav">
                 <NavbarItem href="/" label="Home"  />
                 <NavbarItem href="/createEvent" label="Criar Evento"  />
-                <NavbarItem href="/createEvent" label="Criar Evento"  />
+                <NavbarItem href="/createLocal" label="Adicionar Local"  />
+                <NavbarItem href="/updateEvent" label="Atualizar Evento"  />
+                <NavbarItem href="/updateLocal" label="Atualizar Local"  />
+                <NavbarItem href="/deleteEvent" label="Deletar Evento"  />
+                <NavbarItem href="/deleteLocal" label="Deletar Local"  />
+                <NavbarItem href="/viewEvents" label="Listar Eventos"  />
+                <NavbarItem href="/viewLocals" label="Listar Locais"  />
             </ul>
             </div>
         </div>

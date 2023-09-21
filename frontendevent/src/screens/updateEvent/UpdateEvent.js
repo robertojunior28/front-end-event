@@ -9,8 +9,9 @@ import Card from '../../components/Card';
 import FormGroup from '../../components/FormGroup';
 
 
-class CreateEvent extends React.Component {
+class UpdateEvent extends React.Component {
   state = {
+    id: 0,
     title: "",
     description: "",
     date: "",
@@ -21,35 +22,30 @@ class CreateEvent extends React.Component {
     uf: ""
   }
 
-  create = () => {
+  update = () => {
     const eventDto = {
       title: this.state.title,
       description: this.state.description,
       date: this.state.date,
       time: this.state.time,
-      locals: [
-        {
-            street: this.state.street,
-            number: this.state.number,
-            city: this.state.city,
-            uf: this.state.uf
-        }
-      ]
-      
+      street: this.state.street,
+      number: this.state.number,
+      city: this.state.city,
+      uf: this.state.uf
     };
 
 
-    axios.post('http://localhost:8080/event', eventDto, {
+    axios.put(`http://localhost:8080/event/${this.state.id}`, eventDto, {
       'Content-Type': 'application/json',
     })
     .then(response => {
-      console.log('Evento criado com sucesso:', response.data);
-      alert('Evento criado com sucesso');
+      console.log('Evento atualizado com sucesso:', response.data);
+      alert('Evento atualizado com sucesso');
       window.location.reload();
     })
     .catch(error => {
-      console.error('Erro ao criar evento:', error);
-      alert('Erro ao criar evento');
+      console.error('Erro ao atualizar o evento:', error);
+      alert('Erro ao atualizar o evento');
     });
     
   };
@@ -58,16 +54,24 @@ class CreateEvent extends React.Component {
   cancel = () => {
     this.props.history.push('/'); 
     window.location.reload();
+    
   };
 
   render(){
         return (
             <div className='container'>
                 <br/><br/><br/><br/>
-                <Card title="Cadastro de Evento">
+                <Card title="Atualizar Evento">
                     <div className="row">
                         <div className="col-lg-12">
                             <div className="bs-component">
+                                <FormGroup label="Id: *" htmlFor="inputId">
+                                    <input type="text" 
+                                        id="inputId" 
+                                        className="form-control"
+                                        name="id"
+                                        onChange={e => this.setState({id: e.target.value})} />
+                                </FormGroup>
                                 <FormGroup label="Título: *" htmlFor="inputTitle">
                                     <input type="text" 
                                         id="inputTitle" 
@@ -87,7 +91,7 @@ class CreateEvent extends React.Component {
                                         id="inputDate"
                                         className="form-control"
                                         name="date"
-                                        onChange={e => this.setState({date: e.target.value})} />
+                                        onChange={e => this.setState({password: e.target.value})} />
                                 </FormGroup>
                                 <FormGroup label="Hora: *" htmlFor="inputTime">
                                     <input type="text" 
@@ -124,8 +128,8 @@ class CreateEvent extends React.Component {
                                         name="uf"
                                         onChange={e => this.setState({uf: e.target.value})} />
                                 </FormGroup>
-                                <button onClick={this.create} type="button" className="btn btn-success">
-                                    <i className="pi pi-save"></i> Salvar
+                                <button onClick={this.update} type="button" className="btn btn-success">
+                                    <i className="pi pi-save"></i> Atualizar
                                 </button>
                                 <button onClick={this.cancel} type="button" className="btn btn-danger">
                                     <i className="pi pi-times"></i> Cancelar
@@ -138,4 +142,4 @@ class CreateEvent extends React.Component {
         )
     }
 }
-export default withRouter(CreateEvent);
+export default withRouter(UpdateEvent);

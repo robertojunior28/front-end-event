@@ -9,8 +9,9 @@ import Card from '../../components/Card';
 import FormGroup from '../../components/FormGroup';
 
 
-class CreateEvent extends React.Component {
+class UpdateLocal extends React.Component {
   state = {
+    id: 0,
     title: "",
     description: "",
     date: "",
@@ -21,35 +22,30 @@ class CreateEvent extends React.Component {
     uf: ""
   }
 
-  create = () => {
-    const eventDto = {
+  update = () => {
+    const localDto = {
       title: this.state.title,
       description: this.state.description,
       date: this.state.date,
       time: this.state.time,
-      locals: [
-        {
-            street: this.state.street,
-            number: this.state.number,
-            city: this.state.city,
-            uf: this.state.uf
-        }
-      ]
-      
+      street: this.state.street,
+      number: this.state.number,
+      city: this.state.city,
+      uf: this.state.uf
     };
 
 
-    axios.post('http://localhost:8080/event', eventDto, {
+    axios.put(`http://localhost:8080/local/${this.state.id}`, localDto, {
       'Content-Type': 'application/json',
     })
     .then(response => {
-      console.log('Evento criado com sucesso:', response.data);
-      alert('Evento criado com sucesso');
+      console.log('Local atualizado com sucesso:', response.data);
+      alert('Local atualizado com sucesso');
       window.location.reload();
     })
     .catch(error => {
-      console.error('Erro ao criar evento:', error);
-      alert('Erro ao criar evento');
+      console.error('Erro ao atualizar o local:', error);
+      alert('Erro ao atualizar o local');
     });
     
   };
@@ -63,38 +59,17 @@ class CreateEvent extends React.Component {
   render(){
         return (
             <div className='container'>
-                <br/><br/><br/><br/>
-                <Card title="Cadastro de Evento">
+              <br/><br/><br/><br/>
+                <Card title="Atualizar Evento">
                     <div className="row">
                         <div className="col-lg-12">
                             <div className="bs-component">
-                                <FormGroup label="Título: *" htmlFor="inputTitle">
+                                <FormGroup label="Id: *" htmlFor="inputId">
                                     <input type="text" 
-                                        id="inputTitle" 
+                                        id="inputId" 
                                         className="form-control"
-                                        name="title"
-                                        onChange={e => this.setState({title: e.target.value})} />
-                                </FormGroup>
-                                <FormGroup label="Descrição: *" htmlFor="inputDescription">
-                                    <input type="text" 
-                                        id="inputDescription"
-                                        className="form-control"
-                                        name="description"
-                                        onChange={e => this.setState({description: e.target.value})} />
-                                </FormGroup>
-                                <FormGroup label="Data: *" htmlFor="inputDate">
-                                    <input type="text" 
-                                        id="inputDate"
-                                        className="form-control"
-                                        name="date"
-                                        onChange={e => this.setState({date: e.target.value})} />
-                                </FormGroup>
-                                <FormGroup label="Hora: *" htmlFor="inputTime">
-                                    <input type="text" 
-                                        id="inputTime"
-                                        className="form-control"
-                                        name="time"
-                                        onChange={e => this.setState({time: e.target.value})} />
+                                        name="id"
+                                        onChange={e => this.setState({id: e.target.value})} />
                                 </FormGroup>
                                 <FormGroup label="Rua: *" htmlFor="inputStreet">
                                     <input type="text" 
@@ -124,8 +99,8 @@ class CreateEvent extends React.Component {
                                         name="uf"
                                         onChange={e => this.setState({uf: e.target.value})} />
                                 </FormGroup>
-                                <button onClick={this.create} type="button" className="btn btn-success">
-                                    <i className="pi pi-save"></i> Salvar
+                                <button onClick={this.update} type="button" className="btn btn-success">
+                                    <i className="pi pi-save"></i> Atualizar
                                 </button>
                                 <button onClick={this.cancel} type="button" className="btn btn-danger">
                                     <i className="pi pi-times"></i> Cancelar
@@ -138,4 +113,4 @@ class CreateEvent extends React.Component {
         )
     }
 }
-export default withRouter(CreateEvent);
+export default withRouter(UpdateLocal);
