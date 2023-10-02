@@ -21,19 +21,19 @@ class DeleteEvent extends React.Component {
     super();
     this.service = new EventApiService();
   }
-  delete = () => {
+  delete = async () => {
     const eventDto = {
       id: 0,
     };
 
-    this.service
+    await this.service
       .delete(`/${this.state.id}`, eventDto, {
         "Content-Type": "application/json",
       })
       .then((response) => {
         console.log("Evento deletado com sucesso:", response.data);
-        showSuccessMessage("Evento deletado com sucesso");
         window.location.reload();
+        showSuccessMessage("Evento deletado com sucesso");
       })
       .catch((error) => {
         console.error("Erro ao deletar o evento:", error);

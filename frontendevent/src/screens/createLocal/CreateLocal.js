@@ -26,7 +26,7 @@ class CreateLocal extends React.Component {
     this.service = new LocalApiService();
   }
 
-  create = () => {
+  create = async () => {
     const errors = this.validate();
 
     if (errors.length > 0) {
@@ -43,7 +43,7 @@ class CreateLocal extends React.Component {
       uf: this.state.uf,
     };
 
-    this.service
+    await this.service
       .create(localDto, {
         "Content-Type": "application/json",
       })

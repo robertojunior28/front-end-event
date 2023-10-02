@@ -20,12 +20,12 @@ class DeleteLocal extends React.Component {
     super();
     this.service = new LocalApiService();
   }
-  delete = () => {
+  delete = async () => {
     const localDto = {
       id: 0,
     };
 
-    this.service
+    await this.service
       .delete(`/${this.state.id}`, localDto, {
         "Content-Type": "application/json",
       })

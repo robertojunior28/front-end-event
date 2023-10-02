@@ -30,7 +30,7 @@ class UpdateEvent extends React.Component {
     this.service = new EventApiService();
   }
 
-  update = () => {
+  update = async () => {
     const errors = this.validate();
 
     if (errors.length > 0) {
@@ -51,7 +51,7 @@ class UpdateEvent extends React.Component {
       uf: this.state.uf,
     };
 
-    this.service
+    await this.service
       .update(this.state.id, eventDto, {
         "Content-Type": "application/json",
       })
@@ -141,7 +141,7 @@ class UpdateEvent extends React.Component {
                     className="form-control"
                     name="date"
                     onChange={(e) =>
-                      this.setState({ password: e.target.value })
+                      this.setState({ date: e.target.value })
                     }
                   />
                 </FormGroup>

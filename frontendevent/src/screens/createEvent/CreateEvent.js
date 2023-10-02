@@ -31,7 +31,7 @@ class CreateEvent extends React.Component {
     this.service = new EventApiService();
   }
 
-  create = () => {
+  create = async () => {
     const errors = this.validate();
 
     if (errors.length > 0) {
@@ -56,7 +56,7 @@ class CreateEvent extends React.Component {
       ],
     };
 
-    this.service
+    await this.service
       .create(eventDto, {
         "Content-Type": "application/json",
       })
@@ -64,7 +64,7 @@ class CreateEvent extends React.Component {
         console.log("Evento criado com sucesso:", response.data);
         showSuccessMessage("Evento criado com sucesso");
 
-        window.location.reload();
+        
       })
       .catch((error) => {
         console.error("Erro ao criar evento:", error);

@@ -36,7 +36,6 @@ class ViewEvents extends React.Component {
         this.setState({
           eventDtos: [],
         });
-        showWarningMessage("Estamos passando por um erro no servidor");
       });
   }
 

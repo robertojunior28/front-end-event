@@ -36,7 +36,6 @@ class ViewLocals extends React.Component {
           localDtos: [],
         });
       });
-    showWarningMessage("Estamos passando por um erro no servidor");
   }
 
   render() {

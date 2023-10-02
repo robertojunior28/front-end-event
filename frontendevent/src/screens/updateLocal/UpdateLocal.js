@@ -29,7 +29,7 @@ class UpdateLocal extends React.Component {
     this.service = new LocalApiService();
   }
 
-  update = () => {
+  update = async () => {
     const errors = this.validate();
 
     if (errors.length > 0) {
@@ -50,7 +50,7 @@ class UpdateLocal extends React.Component {
       uf: this.state.uf,
     };
 
-    this.service
+    await this.service
       .update(this.state.id, localDto, {
         "Content-Type": "application/json",
       })
