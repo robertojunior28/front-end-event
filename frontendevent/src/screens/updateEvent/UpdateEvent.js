@@ -19,16 +19,25 @@ class UpdateEvent extends React.Component {
     description: "",
     date: "",
     time: "",
+    idLocal: 0,
     street: "",
     number: "",
     city: "",
     uf: "",
+    dataLoaded: false,
   };
 
   constructor() {
     super();
     this.service = new EventApiService();
   }
+
+  componentDidMount(){
+    const params = this.props.match.params;
+    const id = params.id;
+    this.findById(id);
+}
+
 
   update = async () => {
     const errors = this.validate();
@@ -45,6 +54,7 @@ class UpdateEvent extends React.Component {
       description: this.state.description,
       date: this.state.date,
       time: this.state.time,
+      idLocal: this.state.idLocal,
       street: this.state.street,
       number: this.state.number,
       city: this.state.city,
@@ -57,14 +67,38 @@ class UpdateEvent extends React.Component {
       })
       .then((response) => {
         console.log("Evento atualizado com sucesso:", response.data);
-        showSuccessMessage("Evento atualizado com sucesso");
+        
+        this.props.history.push('/viewEvents?updateSuccess=true');
         window.location.reload();
+        
       })
       .catch((error) => {
         console.error("Erro ao atualizar o evento:", error);
         showErrorMessage("Erro ao atualizar o evento");
       });
   };
+
+  cancel = () => {
+    this.props.history.push('/');
+    window.location.reload();
+  };
+
+  findById = (eventId) => {
+    this.service.get(`/${eventId}`)
+      .then(response => {
+        const event = response.data;
+        
+        const { id, title, description, date, time, idLocal, street, number, city, uf } = event;
+  
+        this.setState({ id, title, description, date, time, idLocal, street, number, city, uf });
+        
+        console.log(event);
+      })
+      .catch(error => {
+        console.log(error.response);
+      });
+  }
+
 
   validate = () => {
     const errors = [];
@@ -89,10 +123,7 @@ class UpdateEvent extends React.Component {
     return errors;
   };
 
-  cancel = () => {
-    this.props.history.push("/");
-    window.location.reload();
-  };
+  
 
   render() {
     return (
@@ -111,7 +142,9 @@ class UpdateEvent extends React.Component {
                     id="inputId"
                     className="form-control"
                     name="id"
+                    value={this.state.id}
                     onChange={(e) => this.setState({ id: e.target.value })}
+                    disabled
                   />
                 </FormGroup>
                 <FormGroup label="Título: *" htmlFor="inputTitle">
@@ -120,6 +153,7 @@ class UpdateEvent extends React.Component {
                     id="inputTitle"
                     className="form-control"
                     name="title"
+                    value={this.state.title}
                     onChange={(e) => this.setState({ title: e.target.value })}
                   />
                 </FormGroup>
@@ -129,6 +163,7 @@ class UpdateEvent extends React.Component {
                     id="inputDescription"
                     className="form-control"
                     name="description"
+                    value={this.state.description}
                     onChange={(e) =>
                       this.setState({ description: e.target.value })
                     }
@@ -140,6 +175,7 @@ class UpdateEvent extends React.Component {
                     id="inputDate"
                     className="form-control"
                     name="date"
+                    value={this.state.date}
                     onChange={(e) =>
                       this.setState({ date: e.target.value })
                     }
@@ -151,6 +187,7 @@ class UpdateEvent extends React.Component {
                     id="inputTime"
                     className="form-control"
                     name="time"
+                    value={this.state.time}
                     onChange={(e) => this.setState({ time: e.target.value })}
                   />
                 </FormGroup>
@@ -160,6 +197,7 @@ class UpdateEvent extends React.Component {
                     id="inputStreet"
                     className="form-control"
                     name="street"
+                    value={this.state.street}
                     onChange={(e) => this.setState({ street: e.target.value })}
                   />
                 </FormGroup>
@@ -169,6 +207,7 @@ class UpdateEvent extends React.Component {
                     id="inputNumber"
                     className="form-control"
                     name="number"
+                    value={this.state.number}
                     onChange={(e) => this.setState({ number: e.target.value })}
                   />
                 </FormGroup>
@@ -178,6 +217,7 @@ class UpdateEvent extends React.Component {
                     id="inputCity"
                     className="form-control"
                     name="city"
+                    value={this.state.city}
                     onChange={(e) => this.setState({ city: e.target.value })}
                   />
                 </FormGroup>
@@ -187,6 +227,7 @@ class UpdateEvent extends React.Component {
                     id="inputUf"
                     className="form-control"
                     name="uf"
+                    value={this.state.uf}
                     onChange={(e) => this.setState({ uf: e.target.value })}
                   />
                 </FormGroup>

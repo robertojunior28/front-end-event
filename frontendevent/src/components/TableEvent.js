@@ -1,39 +1,45 @@
-import React from 'react';
+import React from 'react'
 
-class EventTable extends React.Component {
-  render() {
-    const {eventDtos} = this.props;
+export default props => {
+
+    const rows = Array.isArray(props.events) ? props.events.map(event => {
+        return (
+            <tr key={event.id}>
+                <td>{event.id}</td>
+                <td>{event.title}</td>
+                <td>{event.description}</td>
+                <td>{event.date}</td>
+                <td>{event.time}</td>
+                <td>
+                    <button type="button" title="Editar"
+                            className="btn btn-primary"
+                            onClick={e => props.edit(event.id)}>
+                            <i className="pi pi-pencil"></i>
+                    </button>
+                    <button type="button" title="Excluir"
+                            className="btn btn-danger" 
+                            onClick={e => props.delete(event.id)}>
+                            <i className="pi pi-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        )
+    }) : null;
 
     return (
-      <table className="table table-hover">
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Título</th>
-            <th>Descrição</th>
-            <th>Data</th>
-            <th>Hora</th>
-          </tr>
-        </thead>
-        <tbody>
-          {eventDtos.map((eventDto) => (
-              <tr key={eventDto.id}>
-                <td>{eventDto.id}</td>
-                <td>{eventDto.title}</td>
-                <td>{eventDto.description}</td>
-                <td>{eventDto.date}</td>
-                <td>{eventDto.time}</td>
-              
-              </tr>
-            
-          ))}
-        </tbody>
-
-      </table>
-    );
-  }
+        <table className="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Título</th>
+                    <th scope="col">Descrição</th>
+                    <th scope="col">Data</th>
+                    <th scope="col">Hora</th>
+                </tr>
+            </thead>
+            <tbody>
+                {rows}
+            </tbody>
+        </table>
+    )
 }
-
-export default EventTable;
-
-

@@ -14,6 +14,10 @@ import EventApiService from "../../services/EventApiService";
 
 class ViewEvents extends React.Component {
   state = {
+    title: '',
+    description: '',
+    date: '',
+    time: '',
     eventDtos: [],
   };
 
@@ -21,8 +25,24 @@ class ViewEvents extends React.Component {
     super();
     this.service = new EventApiService();
   }
+  componentWillUnmount() {
+    const queryParams = new URLSearchParams(window.location.search);
+    const updateSuccess = queryParams.get('updateSuccess');
+    const createSuccess = queryParams.get('createSuccess');
+
+    if (updateSuccess === 'true') {
+      showSuccessMessage('Evento atualizado com sucesso');
+    }else if(createSuccess === 'true'){
+      showSuccessMessage('Evento criado com sucesso');
+    }
+  }
 
   componentDidMount() {
+    this.find();
+    
+  }
+
+  find = () => {
     var params = "?";
     this.service
       .find(params)
@@ -37,10 +57,29 @@ class ViewEvents extends React.Component {
           eventDtos: [],
         });
       });
+
   }
+  delete = (eventId) => {
+    this.service.delete(eventId
+    ).then( response => 
+        {
+            showSuccessMessage(`Evento ${eventId} deletado com sucesso`);
+            this.find();
+        }
+    ).catch( error => 
+        {
+            console.log(error.response);
+        }
+    );
+}
+
+edit = (eventId) => {
+    this.props.history.push(`/updateEvent/${eventId}`);
+    window.location.reload();
+}
+
 
   render() {
-    const { eventDtos } = this.state;
 
     return (
       <div className="container">
@@ -50,7 +89,9 @@ class ViewEvents extends React.Component {
         <br />
         <Card title="Consulta Evetos">
           <div className="row">
-            <TableEvent eventDtos={eventDtos} />
+            <TableEvent events={this.state.eventDtos}
+                delete={this.delete}
+                edit={this.edit} />
           </div>
         </Card>
       </div>

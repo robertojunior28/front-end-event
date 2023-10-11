@@ -49,7 +49,8 @@ class CreateLocal extends React.Component {
       })
       .then((response) => {
         console.log("Local criado com sucesso:", response.data);
-        showSuccessMessage("Local criado com sucesso");
+        
+        this.props.history.push('/viewLocals?createSuccess=true');
         window.location.reload();
       })
       .catch((error) => {

@@ -14,7 +14,7 @@ export default class EventApiService extends ApiService{
     }
 
     delete(id){
-        return super.delete(`${id}`);
+        return super.delete(`/${id}`);
     }
 
     find(params){

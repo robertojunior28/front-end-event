@@ -15,19 +15,22 @@ import LocalApiService from "../../services/LocalApiService";
 class UpdateLocal extends React.Component {
   state = {
     id: 0,
-    title: "",
-    description: "",
-    date: "",
-    time: "",
     street: "",
     number: "",
     city: "",
     uf: "",
+    dataLoaded: false,
   };
   constructor() {
     super();
     this.service = new LocalApiService();
   }
+
+  componentDidMount(){
+    const params = this.props.match.params;
+    const id = params.id;
+    this.findById(id);
+}
 
   update = async () => {
     const errors = this.validate();
@@ -40,10 +43,6 @@ class UpdateLocal extends React.Component {
     }
 
     const localDto = {
-      title: this.state.title,
-      description: this.state.description,
-      date: this.state.date,
-      time: this.state.time,
       street: this.state.street,
       number: this.state.number,
       city: this.state.city,
@@ -56,7 +55,8 @@ class UpdateLocal extends React.Component {
       })
       .then((response) => {
         console.log("Local atualizado com sucesso:", response.data);
-        showSuccessMessage("Local atualizado com sucesso");
+
+        this.props.history.push('/viewLocals?updateSuccess=true');
         window.location.reload();
       })
       .catch((error) => {
@@ -64,6 +64,29 @@ class UpdateLocal extends React.Component {
         showErrorMessage("Erro ao atualizar o local");
       });
   };
+
+  cancel = () => {
+    this.props.history.push("/");
+    window.location.reload();
+  };
+
+  findById = (localId) => {
+    this.service.get(`/${localId}`)
+      .then(response => {
+        const local = response.data;
+  
+        const { id, street, number, city, uf } = local;
+  
+        this.setState({ id, street, number, city, uf });
+  
+        console.log(local); // Adicione este console.log
+      })
+      .catch(error => {
+        console.log(error.response);
+      });
+  }
+  
+
 
   validate = () => {
     const errors = [];
@@ -89,11 +112,8 @@ class UpdateLocal extends React.Component {
     return errors;
   };
 
-  cancel = () => {
-    this.props.history.push("/");
-    window.location.reload();
-  };
 
+  
   render() {
     return (
       <div className="container">
@@ -105,13 +125,15 @@ class UpdateLocal extends React.Component {
           <div className="row">
             <div className="col-lg-12">
               <div className="bs-component">
-                <FormGroup label="Id: *" htmlFor="inputId">
+              <FormGroup label="Id: *" htmlFor="inputId">
                   <input
                     type="text"
                     id="inputId"
                     className="form-control"
                     name="id"
+                    value={this.state.id}
                     onChange={(e) => this.setState({ id: e.target.value })}
+                    disabled
                   />
                 </FormGroup>
                 <FormGroup label="Rua: *" htmlFor="inputStreet">
@@ -120,6 +142,7 @@ class UpdateLocal extends React.Component {
                     id="inputStreet"
                     className="form-control"
                     name="street"
+                    value={this.state.street}
                     onChange={(e) => this.setState({ street: e.target.value })}
                   />
                 </FormGroup>
@@ -129,6 +152,7 @@ class UpdateLocal extends React.Component {
                     id="inputNumber"
                     className="form-control"
                     name="number"
+                    value={this.state.number}
                     onChange={(e) => this.setState({ number: e.target.value })}
                   />
                 </FormGroup>
@@ -138,6 +162,7 @@ class UpdateLocal extends React.Component {
                     id="inputCity"
                     className="form-control"
                     name="city"
+                    value={this.state.city}
                     onChange={(e) => this.setState({ city: e.target.value })}
                   />
                 </FormGroup>
@@ -147,6 +172,7 @@ class UpdateLocal extends React.Component {
                     id="inputUf"
                     className="form-control"
                     name="uf"
+                    value={this.state.uf}
                     onChange={(e) => this.setState({ uf: e.target.value })}
                   />
                 </FormGroup>

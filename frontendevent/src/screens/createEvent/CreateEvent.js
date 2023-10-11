@@ -46,14 +46,13 @@ class CreateEvent extends React.Component {
       description: this.state.description,
       date: this.state.date,
       time: this.state.time,
-      locals: [
-        {
-          street: this.state.street,
-          number: this.state.number,
-          city: this.state.city,
-          uf: this.state.uf,
-        },
-      ],
+      idLocal: 0,
+      street: this.state.street,
+      number: this.state.number,
+      city: this.state.city,
+      uf: this.state.uf,
+        
+    
     };
 
     await this.service
@@ -62,8 +61,9 @@ class CreateEvent extends React.Component {
       })
       .then((response) => {
         console.log("Evento criado com sucesso:", response.data);
-        showSuccessMessage("Evento criado com sucesso");
 
+        this.props.history.push('/viewEvents?createSuccess=true');
+        window.location.reload();
         
       })
       .catch((error) => {
