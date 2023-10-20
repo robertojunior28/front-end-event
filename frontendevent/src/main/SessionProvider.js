@@ -8,75 +8,79 @@ const AuthProvider = AuthContext.Provider;
 
 export default class SessionProvider extends React.Component{
 
-    state = {
-        loggedUser: null,
-        loading: true
-    }
-
-    constructor(){
-        super();
+    constructor(props) {
+        super(props);
         this.service = new AuthApiService();
-    }
-
-    async componentDidMount(){
+      }
+    
+      state = {
+        loggedUser: null,
+        loading: true,
+      };
+    
+      async componentDidMount() {
+        this.checkAuthentication();
+      }
+    
+      checkAuthentication = async () => {
         const isAuthenticated = await this.service.isAuthenticated();
-
-        if(isAuthenticated){
-            this.start();
+        if (isAuthenticated) {
+          this.start();
         }
-        
-        this.setState({loading: false});
-    }
-
-    login = async (email, password) => {
-        const user = await this.service.login(
-              email,
-              password
-        );
-        
-        if(user){
+        this.setState({ loading: false });
+      };
+    
+      login = async (email, password) => {
+        try {
+          const user = await this.service.login(email, password);
+          if (user) {
             this.start();
             return user;
-        }else{
+          } else {
             return null;
+          }
+        } catch (error) {
+          console.error("Erro ao fazer login:", error);
+          return null;
         }
-  }
-
-    start = () => {
+      };
+    
+      start = () => {
         const loggedUser = this.service.getLoggedUser();
         const token = this.service.getToken();
-
-        this.setState({loggedUser});
+        
+        this.setState({ loggedUser });
         this.service.registerToken(token);
-    }
-
-    end = () => {
-        console.log('encerrando sessão');
-        this.setState({loggedUser: null});
+      };
+    
+      end = () => {
+        console.log('Encerrando sessão');
         this.service.logout();
-    }
-
-    isAuthenticated = () => {
-        return this.state.loggedUser != null;
-    }
-
-    isAdmin = () => {
-        return this.state.loggedUser == "ADMIN";
-    }
-
-    render(){
-        if(this.state.loading){
-            return false;
+        
+        this.setState({ loggedUser: null });
+      };
+    
+      isAuthenticated = () => {
+        return this.state.loggedUser !== null;
+      };
+    
+      isAdmin = () => {
+        return this.state.loggedUser && this.state.loggedUser.userRole === "ADMIN";
+      };
+    
+      render() {
+        if (this.state.loading) {
+          return null;
         }
-
+    
         const context = {
-            loggedUser: this.state.loggedUser,
-            isAuthenticated: this.isAuthenticated(),
-            isAdmin: this.isAdmin(),
-            start: this.start,
-            end: this.end,
-            login: this.login
-        }
+          loggedUser: this.state.loggedUser,
+          isAuthenticated: this.isAuthenticated(),
+          isAdmin: this.isAdmin(),
+          start: this.start,
+          end: this.end,
+          login: this.login,
+        };
 
         return(
             <AuthProvider value={context} >

@@ -40,20 +40,21 @@ class Login extends React.Component {
     };
 
     this.context
-      .login(loginDto, {
-        "Content-Type": "application/json",
-      })
-      .then((response) => {
-        console.log("Usário logado com sucesso:", response.data);
+  .login(loginDto, {
+    "Content-Type": "application/json",
+  })
+  .then((response) => {
+    console.log("Resposta do servidor:", response);
+    console.log("Usuário logado com sucesso:", response.data);
 
-        this.props.history.push('/viewEvents?createSuccess=true');
-        window.location.reload();
-        
-      })
-      .catch((error) => {
-        console.error("Login inválido:", error);
-        showErrorMessage("Login inválido");
-      });
+    this.props.history.push('/viewEvents?createSuccess=true');
+    window.location.reload();
+  })
+  .catch((error) => {
+    console.log("Erro ao fazer login:", error);
+    console.error("Login inválido:", error);
+    showErrorMessage("Login inválido");
+  });
   };
 
   validate = () => {
